@@ -1,9 +1,9 @@
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
-import icon__edit from './images/icon__edit.svg';
-import icon__close from './images/icon__close.svg';
-import icon__add from './images/add.png';
+import icon__edit from '../images/icon__edit.svg';
+import icon__close from '../images/icon__close.svg';
+import icon__add from '../images/add.png';
 
 
 function App() {
