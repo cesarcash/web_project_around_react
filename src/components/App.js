@@ -1,4 +1,6 @@
-import logo from './images/logo__white.png';
+import Header from './Header.js';
+import Main from './Main.js';
+import Footer from './Footer.js';
 import icon__edit from './images/icon__edit.svg';
 import icon__close from './images/icon__close.svg';
 import icon__add from './images/add.png';
@@ -72,9 +74,7 @@ function App() {
       </div>
       <div className="page">
           <div className="page__container">
-              <header className="header">
-                  <img src={logo} alt="Alrededor del mundo" className="header__logo" />
-              </header>            
+            <Header></Header>
               <div className="user">
                   <div className="user__picture">
                       <div className="user__picture-edit"></div>
@@ -95,10 +95,8 @@ function App() {
                       </button>
                   </div>
               </div>
-              <main className="post" id="post"></main>
-              <footer className="footer">
-                  <p className="footer__author">&copy; 2024 @cesarcash</p>
-              </footer>
+              <Main />
+              <Footer></Footer>
           </div>
       </div>
       <template id="postTemplate">
