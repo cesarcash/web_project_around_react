@@ -9,8 +9,6 @@ function App() {
     const [isEditProfilePopupOpen, setEditProfile] = useState(false);
     const [isAddPlacePopupOpen, setAddPlace] = useState(false);
     const [isEditAvatarPopupOpen, setEditAvatar] = useState(false);
-    const [isModalClose, setCloseModal] = useState(false);
-    console.log("🚀 ~ App ~ isModalClose:", isModalClose)
     
     function handleEditAvatarClick(){
         setEditAvatar(true)
@@ -23,10 +21,12 @@ function App() {
     function handleAddPlaceClick(){
         setAddPlace(true)
     }
-
+    
     function closeAllPopups(){
-
-        setCloseModal(true);
+        
+        setEditAvatar(false)
+        setEditProfile(false)
+        setAddPlace(false)
 
     }
 
@@ -34,9 +34,28 @@ function App() {
     return (
         <>
 
-            {isEditAvatarPopupOpen && (<PopupWithForm name="avatar" title="Cambiar foto de perfil" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}></PopupWithForm>)}
-            {isEditProfilePopupOpen && (<PopupWithForm name="profile" title="Editar perfil" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}></PopupWithForm>)}
-            {isAddPlacePopupOpen && (<PopupWithForm name="place" title="Nuevo lugar" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}></PopupWithForm>)}
+            {isEditAvatarPopupOpen && (
+                <PopupWithForm name="avatar" title="Cambiar foto de perfil" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
+                    <input type="url" className="form__input" name="avatar" id="url-photo" required placeholder="Enlace a la imagen" />
+                    <span className="form__input-error url-photo-error"></span>
+                </PopupWithForm>)
+            }
+            {isEditProfilePopupOpen && (
+                <PopupWithForm name="profile" title="Editar perfil" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
+                    <input type="text" className="form__input" name="nameProfile" id="name-input" required placeholder="Nombre" minLength="2" maxLength="40" />
+                    <span className="form__input-error name-input-error"></span>
+                    <input type="text" className="form__input" name="aboutMe" id="about-input" required placeholder="Acerca de mi" minLength="2" maxLength="200" />
+                    <span className="form__input-error about-input-error"></span>
+                </PopupWithForm>)
+            }
+            {isAddPlacePopupOpen && (
+                <PopupWithForm name="place" title="Nuevo lugar" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
+                    <input type="text" className="form__input" name="title" id="title-input" required placeholder="Título" minLength="2" maxLength="30" />
+                    <span className="form__input-error title-input-error"></span>
+                    <input type="url" className="form__input" name="url" id="url-input" required placeholder="Enlace a la imagen" />
+                    <span className="form__input-error url-input-error"></span>
+                </PopupWithForm>)
+            }
 
             <div className="page">
                 <div className="page__container">
