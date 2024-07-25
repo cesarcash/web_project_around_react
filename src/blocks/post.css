@@ -18,6 +18,11 @@
     position: relative;
     width: 100%;
     overflow: hidden;
+    background-size: cover;
+}
+
+.post__image-container {
+    cursor: pointer;
 }
 
 .post__image-container::before {

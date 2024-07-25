@@ -7,13 +7,13 @@
 }
 
 .user__picture {
-    max-width: 120px;
+    width: 120px;
     height: 120px;
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 14px;
     position: relative;
-    transition: .3s ease-in all;
+    background-size: cover;
 }
 
 .user__picture:hover {
