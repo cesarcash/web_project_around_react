@@ -9,6 +9,11 @@ function App() {
     const [isEditProfilePopupOpen, setEditProfile] = useState(false);
     const [isAddPlacePopupOpen, setAddPlace] = useState(false);
     const [isEditAvatarPopupOpen, setEditAvatar] = useState(false);
+    const [selectedCard, setSelectedCard] = useState();
+
+    function handleCardClick(){
+        setSelectedCard(true)
+    }
     
     function handleEditAvatarClick(){
         setEditAvatar(true)
@@ -27,6 +32,7 @@ function App() {
         setEditAvatar(false)
         setEditProfile(false)
         setAddPlace(false)
+        setSelectedCard(null)
 
     }
 
@@ -40,6 +46,7 @@ function App() {
                     <span className="form__input-error url-photo-error"></span>
                 </PopupWithForm>)
             }
+
             {isEditProfilePopupOpen && (
                 <PopupWithForm name="profile" title="Editar perfil" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
                     <input type="text" className="form__input" name="nameProfile" id="name-input" required placeholder="Nombre" minLength="2" maxLength="40" />
@@ -48,6 +55,7 @@ function App() {
                     <span className="form__input-error about-input-error"></span>
                 </PopupWithForm>)
             }
+
             {isAddPlacePopupOpen && (
                 <PopupWithForm name="place" title="Nuevo lugar" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
                     <input type="text" className="form__input" name="title" id="title-input" required placeholder="Título" minLength="2" maxLength="30" />
@@ -64,7 +72,8 @@ function App() {
                         onEditProfileClick={handleEditProfileClick} 
                         onAddPlaceClick={handleAddPlaceClick} 
                         onEditAvatarClick={handleEditAvatarClick} 
-                        onCardClick="card" >
+                        onCardClick={handleCardClick} 
+                        ImagePopup={selectedCard} >
                     </Main>
                     <Footer></Footer>
                 </div>

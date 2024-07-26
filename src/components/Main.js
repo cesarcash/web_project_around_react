@@ -58,7 +58,7 @@ function Main(props){
             <section className="post" id="post">
                 {
                     cards.map(card => (
-                        <Card card={card}></Card>
+                        <Card key={card._id} card={card} ImagePopup={props.ImagePopup} onCardClick={props.onCardClick}></Card>
                     ))
                 }
             </section>
