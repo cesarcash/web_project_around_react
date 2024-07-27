@@ -1,16 +1,16 @@
 import '../blocks/popup.css';
 import icon__close from '../images/icon__close.svg';
 
-function ImagePopup(props){
+function ImagePopup({card,onClose}){
 
-    // props.selectedCard 
+    const isOpen = card ? 'popup_opened' : '';
 
     return (
-        <div className={`popup popup_type_${props.name}`} >
+        <div className={`popup popup_type_image ${isOpen}`} >
             <div className="popup__image">
-                <img className="popup__view-image" />
-                <p className="popup__text"></p>
-                <button className="button button_action_close" aria-label="Cerrar ventana" onClick={props.onClose} >
+                <img className="popup__view-image" src={card.link} alt={card.name} />
+                <p className="popup__text" >{card.name}</p>
+                <button className="button button_action_close" aria-label="Cerrar ventana" onClick={onClose} >
                     <img src={icon__close} className="button__close-image" alt="Cerrar ventana" />
                 </button>
             </div>

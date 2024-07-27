@@ -3,16 +3,17 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
+import ImagePopup from './ImagePopup.js';
 
 function App() {
 
     const [isEditProfilePopupOpen, setEditProfile] = useState(false);
     const [isAddPlacePopupOpen, setAddPlace] = useState(false);
     const [isEditAvatarPopupOpen, setEditAvatar] = useState(false);
-    const [selectedCard, setSelectedCard] = useState();
-
-    function handleCardClick(){
-        setSelectedCard(true)
+    const [selectedCard, setSelectedCard] = useState(null);
+    
+    function handleCardClick(card){
+        setSelectedCard(card)
     }
     
     function handleEditAvatarClick(){
@@ -22,7 +23,7 @@ function App() {
     function handleEditProfileClick(){
         setEditProfile(true)
     }
-    
+
     function handleAddPlaceClick(){
         setAddPlace(true)
     }
@@ -35,7 +36,6 @@ function App() {
         setSelectedCard(null)
 
     }
-
 
     return (
         <>
@@ -65,6 +65,8 @@ function App() {
                 </PopupWithForm>)
             }
 
+            {selectedCard && (<ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>)}
+
             <div className="page">
                 <div className="page__container">
                     <Header></Header>
@@ -72,8 +74,7 @@ function App() {
                         onEditProfileClick={handleEditProfileClick} 
                         onAddPlaceClick={handleAddPlaceClick} 
                         onEditAvatarClick={handleEditAvatarClick} 
-                        onCardClick={handleCardClick} 
-                        ImagePopup={selectedCard} >
+                        onCardClick={handleCardClick} >
                     </Main>
                     <Footer></Footer>
                 </div>

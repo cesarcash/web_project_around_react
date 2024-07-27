@@ -1,4 +1,4 @@
-function Card({card,ImagePopup,onCardClick}){
+function Card({card,onCardClick}){
 
     function handleClick() {
         onCardClick(card);
@@ -6,7 +6,6 @@ function Card({card,ImagePopup,onCardClick}){
 
     return (
         <section className="post__item">
-            {/* <div className="post__image-container" style={{backgroundImage: `url(${card.link})`}}> */}
             <div className="post__image-container" >
                 <button className="button button_action_delete" aria-label="Eliminar post"></button>
                 <img className="post__image" src={card.link} onClick={handleClick} />
