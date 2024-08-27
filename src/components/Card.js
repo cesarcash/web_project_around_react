@@ -1,8 +1,17 @@
+import { useContext } from "react";
+import CurrentUserContext from "../contexts/CurrentUserContext";
+
 function Card({card,onCardClick}){
+    // console.log("🚀 ~ Card ~ card:", card)
+
+    const currentUser = useContext(CurrentUserContext);
+    // console.log("🚀 ~ Card ~ currentUser:", currentUser)
 
     function handleClick() {
         onCardClick(card);
     } 
+
+    // const isOwn = card.
 
     return (
         <section className="post__item">

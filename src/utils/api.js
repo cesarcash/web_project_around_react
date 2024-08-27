@@ -122,11 +122,11 @@ class Api {
 
 }
 
-export const api = new Api({
+const api = new Api({
     headers: {
       authorization: configHeaders.token,
       type: configHeaders.type
     }
 });
 
-// export default api;
+export default api;

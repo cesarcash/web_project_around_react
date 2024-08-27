@@ -27,13 +27,6 @@ export const configHeaders = {
   type: 'application/json'
 }
 
-// const api = new Api({
-//   headers: {
-//     authorization: configHeaders.token,
-//     type: configHeaders.type
-//   }
-// });
-
 export const config = {
     formSelector: ".form",
     inputSelector: ".form__input",

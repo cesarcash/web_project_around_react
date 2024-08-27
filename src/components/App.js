@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import Header from './Header.js';
-import Main from './Main.js';
-import Footer from './Footer.js';
-import PopupWithForm from './PopupWithForm.js';
-import ImagePopup from './ImagePopup.js';
+import { useEffect, useState } from 'react';
+import Header from './Header';
+import Main from './Main';
+import Footer from './Footer';
+import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
+import api from '../utils/api';
+import {URLUser} from '../utils/constants';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function App() {
 
@@ -11,7 +14,25 @@ function App() {
     const [isAddPlacePopupOpen, setAddPlace] = useState(false);
     const [isEditAvatarPopupOpen, setEditAvatar] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    
+    const [currentUser, setCurrentUser] = useState(null);
+
+    const fetchUserInfo = async () => {
+        
+        try {
+            const userInfo = await api.getInfoUser(URLUser);
+            setCurrentUser(userInfo);
+        } catch(error) {
+            console.log(`Error ${error}`);
+        }
+
+    }
+
+    useEffect(()=> {
+
+        fetchUserInfo()
+
+    },[])
+
     function handleCardClick(card){
         setSelectedCard(card)
     }
@@ -37,8 +58,10 @@ function App() {
 
     }
 
-    return (
-        <>
+    return (        
+
+        <CurrentUserContext.Provider value={currentUser}>
+
 
             {isEditAvatarPopupOpen && (
                 <PopupWithForm name="avatar" title="Cambiar foto de perfil" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
@@ -67,6 +90,7 @@ function App() {
 
             {selectedCard && (<ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>)}
 
+
             <div className="page">
                 <div className="page__container">
                     <Header></Header>
@@ -79,6 +103,7 @@ function App() {
                     <Footer></Footer>
                 </div>
             </div>
+
 
             <template id="postTemplate">
                 <section className="post__item">
@@ -169,7 +194,7 @@ function App() {
                 </div>
             </div> */}
 
-        </>
+        </CurrentUserContext.Provider>
 
     );
 
