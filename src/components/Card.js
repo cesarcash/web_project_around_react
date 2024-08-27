@@ -1,28 +1,31 @@
 import { useContext } from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
+import '../blocks/card.css';
 
 function Card({card,onCardClick}){
-    // console.log("🚀 ~ Card ~ card:", card)
 
     const currentUser = useContext(CurrentUserContext);
-    // console.log("🚀 ~ Card ~ currentUser:", currentUser)
 
     function handleClick() {
         onCardClick(card);
     } 
 
-    // const isOwn = card.
+    const isOwn = card.owner._id === currentUser._id;
+    const cardDeleteButtonClassName = (`card__delete-button ${isOwn ? 'card__delete-button_visible' : 'card__delete-button_hidden'}`);
+
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const cardLikeButtonClassName = isLiked ? 'card__like-button-visible' : '';
 
     return (
         <section className="post__item">
             <div className="post__image-container" >
-                <button className="button button_action_delete" aria-label="Eliminar post"></button>
+                <button className={`button button_action_delete ${cardDeleteButtonClassName}`} aria-label="Eliminar post"></button>
                 <img className="post__image" src={card.link} onClick={handleClick} />
             </div>
             <div className="post__description">
                 <h2 className="post__name">{card.name}</h2>
                 <div className="post__details">
-                    <button className="button button_action_like" aria-label="Me gusta"></button>
+                    <button className={`button button_action_like ${cardLikeButtonClassName}`} aria-label="Me gusta"></button>
                     <span className="post__likes">{card.likes.length}</span>
                 </div>
             </div>

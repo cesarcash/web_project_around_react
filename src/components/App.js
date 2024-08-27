@@ -90,20 +90,20 @@ function App() {
 
             {selectedCard && (<ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>)}
 
-
-            <div className="page">
-                <div className="page__container">
-                    <Header></Header>
-                    <Main 
-                        onEditProfileClick={handleEditProfileClick} 
-                        onAddPlaceClick={handleAddPlaceClick} 
-                        onEditAvatarClick={handleEditAvatarClick} 
-                        onCardClick={handleCardClick} >
-                    </Main>
-                    <Footer></Footer>
+            {currentUser && (
+                <div className="page">
+                    <div className="page__container">
+                        <Header></Header>
+                        <Main 
+                            onEditProfileClick={handleEditProfileClick} 
+                            onAddPlaceClick={handleAddPlaceClick} 
+                            onEditAvatarClick={handleEditAvatarClick} 
+                            onCardClick={handleCardClick} >
+                        </Main>
+                        <Footer></Footer>
+                    </div>
                 </div>
-            </div>
-
+            )}
 
             <template id="postTemplate">
                 <section className="post__item">
