@@ -104,6 +104,19 @@ class Api {
 
     }
 
+    changeLikeCardStatus(url,isLiked){
+
+        return fetch(url,{
+            method: (isLiked) ? 'DELETE' : 'PUT',
+            headers: {
+                authorization: this._headers.authorization,
+                'Content-Type': this._headers.type
+            }
+        })
+       .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `))
+
+    }
+
     editImgUser(url,avatar){
 
         return fetch(url, {

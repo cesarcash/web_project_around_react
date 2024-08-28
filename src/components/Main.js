@@ -4,7 +4,7 @@ import '../blocks/post.css';
 import icon__edit from '../images/icon__edit.svg';
 import icon__add from '../images/add.png';
 import api from '../utils/api';
-import { URLCards } from '../utils/constants';
+import { URLCards, URLCardLike } from '../utils/constants';
 import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
@@ -17,7 +17,7 @@ function Main(props){
         
         const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-        api.changeLikeCardStatus(card._id, !isLiked)
+        api.changeLikeCardStatus(URLCardLike+'/'+card._id, !isLiked)
         .then((newCard) => {
             setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
         });
@@ -59,7 +59,7 @@ function Main(props){
             <section className="post" id="post">
                 {
                     cards.map(card => (
-                        <Card key={card._id} card={card} onCardClick={props.onCardClick}></Card>
+                        <Card key={card._id} card={card} onCardLike={handleCardLike} onCardClick={props.onCardClick}></Card>
                     ))
                 }
             </section>
