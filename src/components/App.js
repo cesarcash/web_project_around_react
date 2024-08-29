@@ -7,6 +7,7 @@ import ImagePopup from './ImagePopup';
 import api from '../utils/api';
 import {URLUser} from '../utils/constants';
 import CurrentUserContext from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
 
 function App() {
 
@@ -70,14 +71,7 @@ function App() {
                 </PopupWithForm>)
             }
 
-            {isEditProfilePopupOpen && (
-                <PopupWithForm name="profile" title="Editar perfil" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
-                    <input type="text" className="form__input" name="nameProfile" id="name-input" required placeholder="Nombre" minLength="2" maxLength="40" />
-                    <span className="form__input-error name-input-error"></span>
-                    <input type="text" className="form__input" name="aboutMe" id="about-input" required placeholder="Acerca de mi" minLength="2" maxLength="200" />
-                    <span className="form__input-error about-input-error"></span>
-                </PopupWithForm>)
-            }
+            {isEditProfilePopupOpen && (<EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}></EditProfilePopup>)}
 
             {isAddPlacePopupOpen && (
                 <PopupWithForm name="place" title="Nuevo lugar" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>

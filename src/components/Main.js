@@ -24,6 +24,18 @@ function Main(props){
 
     }
 
+    function handleCardDelete(card){
+
+        api.deleteCard(`${URLCards}/${card._id}`)
+        .then(res => {
+            console.log("🚀 ~ handleCardDelete ~ res:", res)
+        })
+        .catch(error => console.error(error))
+
+        setCards(cards.filter(itemCard => itemCard._id !== card._id ))
+
+    }
+
     useEffect( ()=> {
 
         const cardsData = api.getInitialCards(URLCards);
@@ -59,7 +71,7 @@ function Main(props){
             <section className="post" id="post">
                 {
                     cards.map(card => (
-                        <Card key={card._id} card={card} onCardLike={handleCardLike} onCardClick={props.onCardClick}></Card>
+                        <Card key={card._id} card={card} onCardDelete={handleCardDelete} onCardLike={handleCardLike} onCardClick={props.onCardClick}></Card>
                     ))
                 }
             </section>

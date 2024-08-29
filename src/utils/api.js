@@ -65,16 +65,44 @@ class Api {
 
     }
 
-    deleteCard(url){
+    // deleteCard(url){
         
-        return fetch(url, {
-            method: 'DELETE',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
+    //     return fetch(url, {
+    //         method: 'DELETE',
+    //         headers: {
+    //             authorization: this._headers.authorization,
+    //             'Content-Type': this._headers.type
+    //         }
+    //     })
+    //    .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+    // }
+
+    async deleteCard(url){
+
+        const {authorization,type} = this._headers;
+
+        try {
+
+            const response = await fetch(url,{
+    
+                method: 'DELETE',
+                headers: {
+                    authorization,
+                    'Content-type': type
+                }
+    
+            })
+
+            if(!response.ok) {
+                throw new Error(`Error: ${response.status}`);
             }
-        })
-       .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+            return await response.json();
+
+        } catch (error) {
+            console.error(error)
+        }
 
     }
 
@@ -104,16 +132,29 @@ class Api {
 
     }
 
-    changeLikeCardStatus(url,isLiked){
+    async changeLikeCardStatus(url,isLiked){
 
-        return fetch(url,{
-            method: (isLiked) ? 'DELETE' : 'PUT',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
+        const {authorization, type} = this._headers;
+
+        try {
+
+            const response = await fetch(url,{
+                method: (isLiked) ? 'PUT' : 'DELETE',
+                headers: {
+                    authorization,
+                    'Content-Type': type
+                }
+            });
+
+            if(!response.ok){
+                throw new Error(`Error ${response.status}`);
             }
-        })
-       .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `))
+
+            return await response.json();
+
+        } catch (error) {
+            console.error(error)
+        }
 
     }
 

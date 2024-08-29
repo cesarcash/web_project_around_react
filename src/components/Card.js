@@ -2,7 +2,7 @@ import { useContext } from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import '../blocks/card.css';
 
-function Card({card,onCardClick,onCardLike}){
+function Card({card,onCardClick,onCardLike,onCardDelete}){
 
     const currentUser = useContext(CurrentUserContext);
 
@@ -14,6 +14,10 @@ function Card({card,onCardClick,onCardLike}){
         onCardLike(card);
     }
 
+    function handleDeleteClick(){
+        onCardDelete(card);
+    }
+
     const isOwn = card.owner._id === currentUser._id;
     const cardDeleteButtonClassName = (`card__delete-button ${isOwn ? 'card__delete-button_visible' : 'card__delete-button_hidden'}`);
 
@@ -23,7 +27,7 @@ function Card({card,onCardClick,onCardLike}){
     return (
         <section className="post__item">
             <div className="post__image-container" >
-                <button className={`button button_action_delete ${cardDeleteButtonClassName}`} aria-label="Eliminar post"></button>
+                <button className={`button button_action_delete ${cardDeleteButtonClassName}`} onClick={handleDeleteClick} aria-label="Eliminar post"></button>
                 <img className="post__image" src={card.link} onClick={handleClick} />
             </div>
             <div className="post__description">
