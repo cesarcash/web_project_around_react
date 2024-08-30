@@ -5,12 +5,16 @@ import { URLAvatar } from "../utils/constants";
 const EditAvatarPopup = ({isOpen,onClose,onUpdateAvatar}) => {
 
     const avatar = useRef(null);
+
     function handleSubmit(e){
+
         e.preventDefault()
+
         onUpdateAvatar({
             avatar: avatar.current.value,
             url: URLAvatar
         })
+
     }
 
     return (

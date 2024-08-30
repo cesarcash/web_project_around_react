@@ -210,7 +210,7 @@ class Api {
 
         try {
 
-            const response = fetch(url,{
+            const response = await fetch(url,{
                 method: 'PATCH',
                 headers: {
                     authorization,

@@ -91,12 +91,6 @@ function App() {
 
         <CurrentUserContext.Provider value={currentUser}>
 
-            {/* {isEditAvatarPopupOpen && (
-                <PopupWithForm name="avatar" title="Cambiar foto de perfil" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
-                    <input type="url" className="form__input" name="avatar" id="url-photo" required placeholder="Enlace a la imagen" />
-                    <span className="form__input-error url-photo-error"></span>
-                </PopupWithForm>)
-            } */}
             {isEditAvatarPopupOpen && (<EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}></EditAvatarPopup>)}
 
             {isEditProfilePopupOpen && (<EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}></EditProfilePopup>)}
