@@ -8,6 +8,7 @@ import api from '../utils/api';
 import {URLUser} from '../utils/constants';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
 
@@ -59,19 +60,46 @@ function App() {
 
     }
 
+    const handleUpdateUser = async (userInfo,url) => {
+        
+        try{
+
+            const data = await api.setUserInfo(userInfo,url) 
+            setCurrentUser(data)
+            closeAllPopups();
+
+        }catch(error){
+            console.error(`Error: ${error}`);
+        }
+
+    }
+
+    const handleUpdateAvatar = async (data) => {
+        
+        try{
+            await api.editImgUser(data)
+            closeAllPopups();
+        }catch(error){
+            console.error(`Error: ${error}`);
+        }
+
+        // console.log(avatar)
+        //api.updateAvatar(url)
+    }
+
     return (        
 
         <CurrentUserContext.Provider value={currentUser}>
 
-
-            {isEditAvatarPopupOpen && (
+            {/* {isEditAvatarPopupOpen && (
                 <PopupWithForm name="avatar" title="Cambiar foto de perfil" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
                     <input type="url" className="form__input" name="avatar" id="url-photo" required placeholder="Enlace a la imagen" />
                     <span className="form__input-error url-photo-error"></span>
                 </PopupWithForm>)
-            }
+            } */}
+            {isEditAvatarPopupOpen && (<EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}></EditAvatarPopup>)}
 
-            {isEditProfilePopupOpen && (<EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}></EditProfilePopup>)}
+            {isEditProfilePopupOpen && (<EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}></EditProfilePopup>)}
 
             {isAddPlacePopupOpen && (
                 <PopupWithForm name="place" title="Nuevo lugar" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>

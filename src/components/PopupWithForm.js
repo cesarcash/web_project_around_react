@@ -13,7 +13,7 @@ function PopupWithForm(props){
                     <img src={icon__close} className="button__close-image" alt="Cerrar ventana" />
                 </button>
                 <div className="popup__content" >
-                    <form className="form" name={`${props.name}`}>
+                    <form className="form" name={`${props.name}`} onSubmit={props.onSubmit}>
                         <h3 className="form__title">{props.title}</h3>
                         {props.children}
                         <button type="submit" className="form__button" aria-label="Guardar">Guardar</button>

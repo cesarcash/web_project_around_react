@@ -30,20 +30,50 @@ class Api {
 
     }
 
-    editInfoUser({nameProfile,aboutMe},url){
+    // editInfoUser({nameProfile,aboutMe},url){
         
-        return fetch(url, {
-            method: 'PATCH',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            },
-            body: JSON.stringify({
-                name: nameProfile,
-                about: aboutMe
+    //     return fetch(url, {
+    //         method: 'PATCH',
+    //         headers: {
+    //             authorization: this._headers.authorization,
+    //             'Content-Type': this._headers.type
+    //         },
+    //         body: JSON.stringify({
+    //             name: nameProfile,
+    //             about: aboutMe
+    //         })
+    //     })
+    //     .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+    // }
+
+    async setUserInfo({name,about},url){
+
+        const {authorization,type} = this._headers;
+
+        try {
+
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    authorization,
+                    'Content-Type': type
+                },
+                body: JSON.stringify({
+                    name: name,
+                    about: about
+                })
             })
-        })
-        .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+            if(!response.ok){
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            return await response.json();
+
+        } catch (error) {
+            console.error(error);
+        } 
 
     }
 
@@ -158,19 +188,48 @@ class Api {
 
     }
 
-    editImgUser(url,avatar){
+    // editImgUser(url,avatar){
 
-        return fetch(url, {
-            method: 'PATCH',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            },
-            body: JSON.stringify({
-                avatar: avatar
+    //     return fetch(url, {
+    //         method: 'PATCH',
+    //         headers: {
+    //             authorization: this._headers.authorization,
+    //             'Content-Type': this._headers.type
+    //         },
+    //         body: JSON.stringify({
+    //             avatar: avatar
+    //         })
+    //     })
+    //     .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+    // }
+
+    async editImgUser({url,avatar}){
+
+        const {authorization,type} = this._headers;
+
+        try {
+
+            const response = fetch(url,{
+                method: 'PATCH',
+                headers: {
+                    authorization,
+                    'Content-type': type
+                },
+                body: JSON.stringify({
+                    avatar: avatar
+                })
             })
-        })
-        .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+            if(!response.ok){
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            return await response.json();
+
+        }catch(error){
+            console.error(error)
+        }
 
     }
 

@@ -1,8 +1,9 @@
 import { useState, useContext, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 import CurrentUserContext from "../contexts/CurrentUserContext";
+import { URLUser } from "../utils/constants";
 
-function EditProfilePopup({isOpen,onClose}){
+function EditProfilePopup({isOpen,onClose,onUpdateUser}){
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -16,13 +17,24 @@ function EditProfilePopup({isOpen,onClose}){
         setDescription(e.target.value);
     }
 
+    function handleSubmit(e){
+
+        e.preventDefault();
+
+        onUpdateUser({
+            name,
+            about: description,
+        },URLUser);
+
+    }
+
     useEffect(() => {
         setName(currentUser.name);
         setDescription(currentUser.about);
     },[currentUser])
 
     return (
-        <PopupWithForm name="profile" title="Editar perfil" isOpen={isOpen} onClose={onClose}>
+        <PopupWithForm name="profile" title="Editar perfil" isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}>
             <input onChange={handleChangeName} value={name} type="text" className="form__input" name="nameProfile" id="name-input" required placeholder="Nombre" minLength="2" maxLength="40" />
             <span className="form__input-error name-input-error"></span>
             <input onChange={handleChangeDescription} value={description} type="text" className="form__input" name="aboutMe" id="about-input" required placeholder="Acerca de mi" minLength="2" maxLength="200" />
