@@ -5,10 +5,11 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
-import {URLUser} from '../utils/constants';
+import {URLUser,URLCards,URLCardLike} from '../utils/constants';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
 
@@ -17,6 +18,23 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatar] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+    const [cards, setCards] = useState([]);
+
+    useEffect( ()=> {
+
+        const cardsData = api.getInitialCards(URLCards);
+        cardsData.then(res => {
+            setCards(res)
+        })
+        .catch(error => console.log(error))
+
+    },[])
+
+    useEffect(()=> {
+
+        fetchUserInfo()
+
+    },[])
 
     const fetchUserInfo = async () => {
         
@@ -27,13 +45,30 @@ function App() {
             console.log(`Error ${error}`);
         }
 
+    }    
+
+    function handleCardLike(card){
+
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+        api.changeLikeCardStatus(URLCardLike+'/'+card._id, !isLiked)
+        .then((newCard) => {
+            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        });
+
     }
 
-    useEffect(()=> {
+    function handleCardDelete(card){
 
-        fetchUserInfo()
+        api.deleteCard(`${URLCards}/${card._id}`)
+        .then(res => {
+            console.log("🚀 ~ handleCardDelete ~ res:", res)
+        })
+        .catch(error => console.error(error))
 
-    },[])
+        setCards(cards.filter(itemCard => itemCard._id !== card._id ))
+
+    }
 
     function handleCardClick(card){
         setSelectedCard(card)
@@ -77,14 +112,27 @@ function App() {
     const handleUpdateAvatar = async (data) => {
         
         try{
-            await api.editImgUser(data)
+
+            const avatar = await api.editImgUser(data)
+            setCurrentUser(avatar);
             closeAllPopups();
+
         }catch(error){
             console.error(`Error: ${error}`);
         }
 
-        // console.log(avatar)
-        //api.updateAvatar(url)
+    }
+
+    const handleAddPlaceSubmit = async (data) => {
+
+        try{
+            const newCard = await api.setNewCard(data)
+            setCards([newCard, ...cards])
+            closeAllPopups();
+        }catch(error){
+            console.error(`Error: ${error}`);
+        }        
+
     }
 
     return (        
@@ -95,14 +143,7 @@ function App() {
 
             {isEditProfilePopupOpen && (<EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}></EditProfilePopup>)}
 
-            {isAddPlacePopupOpen && (
-                <PopupWithForm name="place" title="Nuevo lugar" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
-                    <input type="text" className="form__input" name="title" id="title-input" required placeholder="Título" minLength="2" maxLength="30" />
-                    <span className="form__input-error title-input-error"></span>
-                    <input type="url" className="form__input" name="url" id="url-input" required placeholder="Enlace a la imagen" />
-                    <span className="form__input-error url-input-error"></span>
-                </PopupWithForm>)
-            }
+            {isAddPlacePopupOpen && (<AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlaceSubmit={handleAddPlaceSubmit}></AddPlacePopup>)}
 
             {selectedCard && (<ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>)}
 
@@ -114,7 +155,10 @@ function App() {
                             onEditProfileClick={handleEditProfileClick} 
                             onAddPlaceClick={handleAddPlaceClick} 
                             onEditAvatarClick={handleEditAvatarClick} 
-                            onCardClick={handleCardClick} >
+                            onCardClick={handleCardClick} 
+                            cards={cards}
+                            onCardLike={handleCardLike}
+                            onCardDelete={handleCardDelete} >
                         </Main>
                         <Footer></Footer>
                     </div>

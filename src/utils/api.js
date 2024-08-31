@@ -77,21 +77,51 @@ class Api {
 
     }
 
-    setNewCard({title,url}, urlCards){
+    // setNewCard({title,url}, urlCards){
         
-        return fetch(urlCards,{
-            method: 'POST',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            },
-            body: JSON.stringify({
-                name: title,
-                link: url
-            })
+    //     return fetch(urlCards,{
+    //         method: 'POST',
+    //         headers: {
+    //             authorization: this._headers.authorization,
+    //             'Content-Type': this._headers.type
+    //         },
+    //         body: JSON.stringify({
+    //             name: title,
+    //             link: url
+    //         })
             
-        })
-        .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+    //     })
+    //     .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
+
+    // }
+
+    async setNewCard({title,url,URLCards}){
+        
+        const {authorization,type} = this._headers;
+        
+        try {
+
+            const response = await fetch(URLCards,{
+                method: 'POST',
+                headers: {
+                    authorization,
+                    'Content-Type': type
+                },
+                body: JSON.stringify({
+                    name: title,
+                    link: url
+                })
+            })
+
+            if(!response.ok){
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            return await response.json();
+
+        }catch(error){
+            console.error(error);
+        }
 
     }
 
