@@ -1,5 +1,4 @@
 import { useRef,useState } from "react";
-import { URLCards } from "../utils/constants";
 import PopupWithForm from "./PopupWithForm";
 
 const AddPlacePopup = ({isOpen,onClose,onAddPlaceSubmit}) => {
@@ -17,8 +16,7 @@ const AddPlacePopup = ({isOpen,onClose,onAddPlaceSubmit}) => {
 
         onAddPlaceSubmit({
             title: title.current.value,
-            url,
-            URLCards
+            url
         })
 
     }

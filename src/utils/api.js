@@ -1,55 +1,67 @@
-import {configHeaders} from './constants';
+import {configHeaders,url} from './constants';
 
 class Api {
 
-    constructor({headers}){
+    constructor({headers,url}){
         this._headers = headers;
+        this._url = url;
     }
 
-    getInitialCards(urlCards){
-
-        return fetch(urlCards,{
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            }
-        })
-        .then(res => res.ok ? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    }
-
-    getInfoUser(urlUser){
-
-        return fetch(urlUser, {
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            }
-        })
-        .then(res => res.ok ? res.json() : Promise.reject(`Error: ${res.status} `) )        
-
-    }
-
-    // editInfoUser({nameProfile,aboutMe},url){
-        
-    //     return fetch(url, {
-    //         method: 'PATCH',
-    //         headers: {
-    //             authorization: this._headers.authorization,
-    //             'Content-Type': this._headers.type
-    //         },
-    //         body: JSON.stringify({
-    //             name: nameProfile,
-    //             about: aboutMe
-    //         })
-    //     })
-    //     .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    // }
-
-    async setUserInfo({name,about},url){
+    async getInitialCards(){
 
         const {authorization,type} = this._headers;
+        const url = this._url+'cards';
+
+        try{
+
+            const response = await fetch(url,{
+                headers: {
+                    authorization,
+                    'Content-Type': type
+                }
+            })
+
+            if(!response.ok){
+                throw new Error(`Error: ${response.status}`)
+            }
+
+            return await response.json();
+
+        }catch(error){
+            console.error(error)
+        }
+
+    }
+
+    async getInfoUser(){
+        
+        const {authorization,type} = this._headers;
+        const url = this._url+'users/me';
+        
+        try {
+
+            const response = await fetch(url,{
+                headers: {
+                    authorization,
+                    'Content-Type': type
+                }
+            })
+
+            if(!response.ok){
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            return await response.json();
+
+        }catch(error){
+            console.error(error);
+        }
+    }
+
+    async setUserInfo({name,about}){
+
+        const {authorization,type} = this._headers;
+        const url = this._url+'users/me';
 
         try {
 
@@ -77,31 +89,14 @@ class Api {
 
     }
 
-    // setNewCard({title,url}, urlCards){
-        
-    //     return fetch(urlCards,{
-    //         method: 'POST',
-    //         headers: {
-    //             authorization: this._headers.authorization,
-    //             'Content-Type': this._headers.type
-    //         },
-    //         body: JSON.stringify({
-    //             name: title,
-    //             link: url
-    //         })
-            
-    //     })
-    //     .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    // }
-
-    async setNewCard({title,url,URLCards}){
+    async setNewCard({title,url}){
         
         const {authorization,type} = this._headers;
+        const urlCards = this._url+'cards';
         
         try {
 
-            const response = await fetch(URLCards,{
+            const response = await fetch(urlCards,{
                 method: 'POST',
                 headers: {
                     authorization,
@@ -125,22 +120,10 @@ class Api {
 
     }
 
-    // deleteCard(url){
-        
-    //     return fetch(url, {
-    //         method: 'DELETE',
-    //         headers: {
-    //             authorization: this._headers.authorization,
-    //             'Content-Type': this._headers.type
-    //         }
-    //     })
-    //    .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    // }
-
-    async deleteCard(url){
+    async deleteCard(idCard){
 
         const {authorization,type} = this._headers;
+        const url = this._url+'cards/'+idCard;
 
         try {
 
@@ -166,35 +149,10 @@ class Api {
 
     }
 
-    addLikeCard(url){
-
-        return fetch(url,{
-            method: 'PUT',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            }
-        })
-       .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    }
-
-    removeLikeCard(url){
-
-        return fetch(url,{
-            method: 'DELETE',
-            headers: {
-                authorization: this._headers.authorization,
-                'Content-Type': this._headers.type
-            }
-        })
-       .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    }
-
-    async changeLikeCardStatus(url,isLiked){
+    async changeLikeCardStatus(idCard,isLiked){
 
         const {authorization, type} = this._headers;
+        const url = this._url+'cards/likes/'+idCard;
 
         try {
 
@@ -218,25 +176,10 @@ class Api {
 
     }
 
-    // editImgUser(url,avatar){
-
-    //     return fetch(url, {
-    //         method: 'PATCH',
-    //         headers: {
-    //             authorization: this._headers.authorization,
-    //             'Content-Type': this._headers.type
-    //         },
-    //         body: JSON.stringify({
-    //             avatar: avatar
-    //         })
-    //     })
-    //     .then(res => res.ok? res.json() : Promise.reject(`Error: ${res.status} `) )
-
-    // }
-
-    async editImgUser({url,avatar}){
+    async editImgUser({avatar}){
 
         const {authorization,type} = this._headers;
+        const url = this._url+'users/me/avatar';
 
         try {
 
@@ -269,7 +212,8 @@ const api = new Api({
     headers: {
       authorization: configHeaders.token,
       type: configHeaders.type
-    }
+    },
+    url
 });
 
 export default api;

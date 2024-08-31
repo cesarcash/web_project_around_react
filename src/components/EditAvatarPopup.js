@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { URLAvatar } from "../utils/constants";
 
 const EditAvatarPopup = ({isOpen,onClose,onUpdateAvatar}) => {
 
@@ -11,8 +10,7 @@ const EditAvatarPopup = ({isOpen,onClose,onUpdateAvatar}) => {
         e.preventDefault()
 
         onUpdateAvatar({
-            avatar: avatar.current.value,
-            url: URLAvatar
+            avatar: avatar.current.value
         })
 
     }

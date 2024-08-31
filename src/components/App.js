@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
-import {URLUser,URLCards,URLCardLike} from '../utils/constants';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -22,27 +20,31 @@ function App() {
 
     useEffect( ()=> {
 
-        const cardsData = api.getInitialCards(URLCards);
-        cardsData.then(res => {
-            setCards(res)
-        })
-        .catch(error => console.log(error))
-
-    },[])
-
-    useEffect(()=> {
-
         fetchUserInfo()
-
+        fetchInitialCards()
+        
     },[])
+    
+    const fetchInitialCards = async () => {
+        
+        try {
+    
+            const cardsData = await api.getInitialCards();
+            setCards(cardsData)
+    
+        }catch(error){
+            alert('Error:',error)
+        }
+
+    }
 
     const fetchUserInfo = async () => {
         
         try {
-            const userInfo = await api.getInfoUser(URLUser);
+            const userInfo = await api.getInfoUser();
             setCurrentUser(userInfo);
         } catch(error) {
-            console.log(`Error ${error}`);
+            alert(`Error ${error}`);
         }
 
     }    
@@ -51,20 +53,20 @@ function App() {
 
         const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-        api.changeLikeCardStatus(URLCardLike+'/'+card._id, !isLiked)
+        api.changeLikeCardStatus(card._id, !isLiked)
         .then((newCard) => {
             setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
         });
 
     }
 
-    function handleCardDelete(card){
+    async function handleCardDelete(card){
 
-        api.deleteCard(`${URLCards}/${card._id}`)
-        .then(res => {
-            console.log("🚀 ~ handleCardDelete ~ res:", res)
-        })
-        .catch(error => console.error(error))
+        try {
+            await api.deleteCard(card._id)
+        }catch(error){
+            alert('Error: ',error)
+        }
 
         setCards(cards.filter(itemCard => itemCard._id !== card._id ))
 
@@ -95,16 +97,16 @@ function App() {
 
     }
 
-    const handleUpdateUser = async (userInfo,url) => {
+    const handleUpdateUser = async (data) => {
         
         try{
 
-            const data = await api.setUserInfo(userInfo,url) 
-            setCurrentUser(data)
+            const user = await api.setUserInfo(data) 
+            setCurrentUser(user)
             closeAllPopups();
 
         }catch(error){
-            console.error(`Error: ${error}`);
+            alert(`Error: ${error}`);
         }
 
     }
@@ -118,7 +120,7 @@ function App() {
             closeAllPopups();
 
         }catch(error){
-            console.error(`Error: ${error}`);
+            alert(`Error: ${error}`);
         }
 
     }
@@ -126,11 +128,13 @@ function App() {
     const handleAddPlaceSubmit = async (data) => {
 
         try{
+
             const newCard = await api.setNewCard(data)
             setCards([newCard, ...cards])
             closeAllPopups();
+
         }catch(error){
-            console.error(`Error: ${error}`);
+            alert(`Error: ${error}`);
         }        
 
     }
@@ -165,37 +169,6 @@ function App() {
                 </div>
             )}
 
-            <template id="postTemplate">
-                <section className="post__item">
-                    <div className="post__image-container">
-                        <button className="button button_action_delete" aria-label="Eliminar post"></button>
-                        <img className="post__image"  />
-                    </div>
-                    <div className="post__description">
-                        <h2 className="post__name"></h2>
-                        <div className="post__details">
-                            <button className="button button_action_like" aria-label="Me gusta"></button>
-                            <span className="post__likes"></span>
-                        </div>
-                    </div>
-                </section>
-            </template>
-
-            {/* cambiar foto de perfil */}
-            {/* <div className="popup" id="popupPhoto"> 
-                <div className="popup__delete">
-                    <button className="button button_action_close" aria-label="Cerrar ventana">
-                        <img src={icon__close} className="button__close-image" alt="Cerrar ventana" />
-                    </button>
-                    <form id="formEditPhoto" name="form" className="form">
-                        <h3 className="form__title">Cambiar foto de perfil</h3>
-                        <input type="url" className="form__input" name="avatar" id="url-photo" required placeholder="Enlace a la imagen" />
-                        <span className="form__input-error url-photo-error"></span>
-                        <button type="submit" className="form__button" aria-label="Guardar">Guardar</button>
-                    </form>
-                </div>
-            </div> */}
-
             {/* confirmacion */}
             {/* <div className="popup" id="popupDelete">
                 <div className="popup__delete">
@@ -204,42 +177,6 @@ function App() {
                     </button>
                     <h3 className="popup__delete-title">¿Estás seguro?</h3>
                     <button className="popup__button" id="buttonDelete" aria-label="Si" value="true">Si</button>
-                </div>
-            </div> */}
-            
-            {/* cambiar perfil */}
-            {/* <div className="popup" id="popupEdit">
-                <div className="popup__form">
-                    <button className="button button_action_close" aria-label="Cerrar ventana">
-                        <img src={icon__close} className="button__close-image" alt="Cerrar ventana" />
-                    </button>
-                    <form id="formEditProfile" name="form" className="form">
-                        <h3 className="form__title">Editar perfil</h3>
-                        <input type="text" className="form__input" name="nameProfile" id="name-input" required placeholder="Nombre" minLength="2" maxLength="40" />
-                        <span className="form__input-error name-input-error"></span>
-                        <input type="text" className="form__input" name="aboutMe" id="about-input" required placeholder="Acerca de mi" minLength="2" maxLength="200" />
-                        <span className="form__input-error about-input-error"></span>
-                        <button type="submit" className="form__button" aria-label="Guardar">Guardar</button>
-                    </form>
-                </div>
-            </div> */}
-
-            {/* añadir lugar */}
-            {/* <div className="popup" id="popupAdd">        
-                <div className="popup__form">
-                    <button className="button button_action_close" aria-label="Cerrar ventana">
-                        <img src={icon__close} className="button__close-image" alt="Cerrar ventana" />
-                    </button>
-                    <div className="popup__content" id="popupContent">
-                        <form id="formNewPost" name="form" className="form">
-                            <h3 className="form__title">Nuevo lugar</h3>
-                            <input type="text" className="form__input" name="title" id="title-input" required placeholder="Título" minLength="2" maxLength="30" />
-                            <span className="form__input-error title-input-error"></span>
-                            <input type="url" className="form__input" name="url" id="url-input" required placeholder="Enlace a la imagen" />
-                            <span className="form__input-error url-input-error"></span>
-                            <button type="submit" className="form__button" aria-label="Crear">Crear</button>
-                        </form>
-                    </div>
                 </div>
             </div> */}
 

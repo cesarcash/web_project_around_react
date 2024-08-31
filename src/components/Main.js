@@ -1,50 +1,14 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import '../blocks/user.css';
 import '../blocks/post.css';
 import icon__edit from '../images/icon__edit.svg';
 import icon__add from '../images/add.png';
-import api from '../utils/api';
-import { URLCards, URLCardLike } from '../utils/constants';
 import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function Main(props){
 
-    // const [cards, setCards] = useState([]);
     const currentUser = useContext(CurrentUserContext);
-
-    // function handleCardLike(card){
-        
-    //     const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-    //     api.changeLikeCardStatus(URLCardLike+'/'+card._id, !isLiked)
-    //     .then((newCard) => {
-    //         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    //     });
-
-    // }
-
-    // function handleCardDelete(card){
-
-    //     api.deleteCard(`${URLCards}/${card._id}`)
-    //     .then(res => {
-    //         console.log("🚀 ~ handleCardDelete ~ res:", res)
-    //     })
-    //     .catch(error => console.error(error))
-
-    //     setCards(cards.filter(itemCard => itemCard._id !== card._id ))
-
-    // }
-
-    // useEffect( ()=> {
-
-    //     const cardsData = api.getInitialCards(URLCards);
-    //     cardsData.then(res => {
-    //         setCards(res)
-    //     })
-    //     .catch(error => console.log(error))
-
-    // },[])
 
     return (
         

@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 import CurrentUserContext from "../contexts/CurrentUserContext";
-import { URLUser } from "../utils/constants";
 
 function EditProfilePopup({isOpen,onClose,onUpdateUser}){
 
@@ -24,7 +23,7 @@ function EditProfilePopup({isOpen,onClose,onUpdateUser}){
         onUpdateUser({
             name,
             about: description,
-        },URLUser);
+        });
 
     }
 
