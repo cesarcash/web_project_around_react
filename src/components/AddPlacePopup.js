@@ -15,8 +15,8 @@ const AddPlacePopup = ({isOpen,onClose,onAddPlaceSubmit}) => {
         e.preventDefault();
 
         onAddPlaceSubmit({
-            title: title.current.value,
-            url
+            name: title.current.value,
+            link: url
         })
 
     }

@@ -20,34 +20,35 @@ function App() {
 
     useEffect( ()=> {
 
+        const fetchInitialCards = async () => {
+            
+            try {
+        
+                const cardsData = await api.getInitialCards();
+                setCards(cardsData)
+        
+            }catch(error){
+                alert('Error:',error)
+            }
+    
+        }
+    
+        const fetchUserInfo = async () => {
+            
+            try {
+                const userInfo = await api.getInfoUser();
+                setCurrentUser(userInfo);
+            } catch(error) {
+                alert(`Error ${error}`);
+            }
+    
+        }
+
         fetchUserInfo()
         fetchInitialCards()
         
     },[])
     
-    const fetchInitialCards = async () => {
-        
-        try {
-    
-            const cardsData = await api.getInitialCards();
-            setCards(cardsData)
-    
-        }catch(error){
-            alert('Error:',error)
-        }
-
-    }
-
-    const fetchUserInfo = async () => {
-        
-        try {
-            const userInfo = await api.getInfoUser();
-            setCurrentUser(userInfo);
-        } catch(error) {
-            alert(`Error ${error}`);
-        }
-
-    }    
 
     function handleCardLike(card){
 

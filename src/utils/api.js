@@ -7,204 +7,73 @@ class Api {
         this._url = url;
     }
 
-    async getInitialCards(){
+    async _makeRequest(endpoint, method = 'GET', body = null){
 
-        const {authorization,type} = this._headers;
-        const url = this._url+'cards';
+        const options = {
+            method,
+            headers: {...this._headers}
+        }
 
-        try{
+        if(body){
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
 
-            const response = await fetch(url,{
-                headers: {
-                    authorization,
-                    'Content-Type': type
-                }
-            })
+        try {
 
-            if(!response.ok){
-                throw new Error(`Error: ${response.status}`)
-            }
-
-            return await response.json();
+            const res = await fetch(`${this._url}${endpoint}`,options);
+            if(!res.ok) throw new Error(`Server error: ${res.status}`);
+            return await res.json();
 
         }catch(error){
-            console.error(error)
+            console.error(`Server error: ${error}`);
+            throw error;
         }
 
     }
 
-    async getInfoUser(){
+    getInitialCards(){
+
+        return this._makeRequest('/cards');        
+
+    }
+
+    getInfoUser(){
+
+        return this._makeRequest('/users/me')
         
-        const {authorization,type} = this._headers;
-        const url = this._url+'users/me';
-        
-        try {
-
-            const response = await fetch(url,{
-                headers: {
-                    authorization,
-                    'Content-Type': type
-                }
-            })
-
-            if(!response.ok){
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            return await response.json();
-
-        }catch(error){
-            console.error(error);
-        }
     }
 
-    async setUserInfo({name,about}){
+    setUserInfo({name,about}){        
 
-        const {authorization,type} = this._headers;
-        const url = this._url+'users/me';
-
-        try {
-
-            const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    authorization,
-                    'Content-Type': type
-                },
-                body: JSON.stringify({
-                    name: name,
-                    about: about
-                })
-            })
-
-            if(!response.ok){
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            return await response.json();
-
-        } catch (error) {
-            console.error(error);
-        } 
+        return this._makeRequest('/users/me','PATCH',{name,about})
 
     }
 
-    async setNewCard({title,url}){
-        
-        const {authorization,type} = this._headers;
-        const urlCards = this._url+'cards';
-        
-        try {
+    setNewCard({name, link}){
 
-            const response = await fetch(urlCards,{
-                method: 'POST',
-                headers: {
-                    authorization,
-                    'Content-Type': type
-                },
-                body: JSON.stringify({
-                    name: title,
-                    link: url
-                })
-            })
-
-            if(!response.ok){
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            return await response.json();
-
-        }catch(error){
-            console.error(error);
-        }
+        return this._makeRequest('/cards','POST',{name,link});
 
     }
 
-    async deleteCard(idCard){
+    deleteCard(idCard){
 
-        const {authorization,type} = this._headers;
-        const url = this._url+'cards/'+idCard;
-
-        try {
-
-            const response = await fetch(url,{
-    
-                method: 'DELETE',
-                headers: {
-                    authorization,
-                    'Content-type': type
-                }
-    
-            })
-
-            if(!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            return await response.json();
-
-        } catch (error) {
-            console.error(error)
-        }
+        return this._makeRequest(`/cards/${idCard}`,'DELETE');
 
     }
 
-    async changeLikeCardStatus(idCard,isLiked){
+    changeLikeCardStatus(idCard,isLiked){
 
-        const {authorization, type} = this._headers;
-        const url = this._url+'cards/likes/'+idCard;
-
-        try {
-
-            const response = await fetch(url,{
-                method: (isLiked) ? 'PUT' : 'DELETE',
-                headers: {
-                    authorization,
-                    'Content-Type': type
-                }
-            });
-
-            if(!response.ok){
-                throw new Error(`Error ${response.status}`);
-            }
-
-            return await response.json();
-
-        } catch (error) {
-            console.error(error)
-        }
+        const method = (isLiked) ? 'PUT' : 'DELETE';
+        return this._makeRequest(`/cards/likes/${idCard}`,method)
 
     }
 
-    async editImgUser({avatar}){
+    editImgUser({avatar}){
 
-        const {authorization,type} = this._headers;
-        const url = this._url+'users/me/avatar';
+        return this._makeRequest('/users/me/avatar','PATCH',{avatar})
 
-        try {
-
-            const response = await fetch(url,{
-                method: 'PATCH',
-                headers: {
-                    authorization,
-                    'Content-type': type
-                },
-                body: JSON.stringify({
-                    avatar: avatar
-                })
-            })
-
-            if(!response.ok){
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            return await response.json();
-
-        }catch(error){
-            console.error(error)
-        }
-
-    }
+    }    
 
 }
 
